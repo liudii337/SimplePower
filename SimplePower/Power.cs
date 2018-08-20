@@ -28,7 +28,7 @@ namespace SimplePower
             region = region1;
             department_num = department;
             domitory_num = domitory;
-
+            powerLists = new List<PowerList>();
         }
     }
 }

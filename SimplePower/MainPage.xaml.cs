@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,12 +27,15 @@ namespace SimplePower
         public MainPage()
         {
             this.InitializeComponent();
-
+            var test1 = new Power("西区", "西9舍", "230");
+            Task<Power> task= myhttp.GetPower(test1);
+            var test2 = task.Result;
+            Task.Delay(10000);
         }
 
         public void Button1_Click(object sender, EventArgs e)
         {
-            
+            result_text.Text = test2.powerLists[0].value.ToString();
         }
     }
 }

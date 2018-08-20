@@ -18,9 +18,10 @@ namespace SimplePower
         private static String __EVENTVALIDATION { get; set; }
         private static List<KeyValuePair<String, String>> paramList { get; set; }
 
-        public async static Task GetPower(Power power)
+        public async static Task<Power> GetPower(Power power)
         {
             var http = new HttpClient();
+            paramList = new List<KeyValuePair<string, string>>();
             string url = "http://202.114.18.218/main.aspx";
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
             var response = await http.GetAsync(url);
@@ -29,28 +30,42 @@ namespace SimplePower
             set_para(result);
             set_paraList("programId", power.region, Empty, Empty, Empty, Empty);
 
+            await Task.Delay(100);
             response =await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
             //传楼栋号
             set_para(result);
             set_paraList("txtyq", power.region, power.department_num, Empty, Empty, Empty);
 
+            await Task.Delay(100);
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
             //传宿舍号
             set_para(result);
             set_paraList(Empty, power.region, power.department_num, power.domitory_num, "65", "19");
 
+            await Task.Delay(100);
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
 
             //初始化文档
             HtmlDocument doc = new HtmlDocument();
-            doc.Load(result);
+            doc.LoadHtml(result);
             //查找节点
-            HtmlNodeCollection titleNodes = doc.DocumentNode.SelectNodes("//table[@rules='all']");
+            var titleNodes = doc.DocumentNode.SelectSingleNode("//table[@rules='all']");
+            var list = titleNodes.SelectNodes(@"tr");
 
+            power.powerLists.Clear();
+            foreach (var i in list)
+            {
+                var list2 = i.SelectNodes(@"td");
+                if(list2!=null)
+                {
+                    power.powerLists.Add(new PowerList(list2[1].InnerText, list2[0].InnerText));
+                }
+            }
 
+            return power;
         }
 
         private static void set_para(string result)
@@ -61,6 +76,7 @@ namespace SimplePower
 
         private static void set_paraList(string EVENTTARGET,string programId,string txtyq,string Txtroom,string x,string y)
         {
+            paramList.Clear();
             paramList.Add(new KeyValuePair<string, string>("__EVENTTARGET", EVENTTARGET));
             paramList.Add(new KeyValuePair<string, string>("__EVENTARGUMENT", ""));
             paramList.Add(new KeyValuePair<string, string>("__LASTFOCUS", ""));
