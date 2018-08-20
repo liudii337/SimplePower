@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,13 @@ namespace SimplePower
 
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
+
+            //初始化文档
+            HtmlDocument doc = new HtmlDocument();
+            doc.Load(result);
+            //查找节点
+            HtmlNodeCollection titleNodes = doc.DocumentNode.SelectNodes("//table[@rules='all']");
+
 
         }
 
