@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,7 +19,7 @@ namespace SimplePower
         private static String __EVENTVALIDATION { get; set; }
         private static List<KeyValuePair<String, String>> paramList { get; set; }
 
-        public async static Task<Power> GetPower(Power power)
+        public async static Task GetPower(Power power,ObservableCollection<PowerList> powerLists)
         {
             var http = new HttpClient();
             paramList = new List<KeyValuePair<string, string>>();
@@ -55,17 +56,16 @@ namespace SimplePower
             var titleNodes = doc.DocumentNode.SelectSingleNode("//table[@rules='all']");
             var list = titleNodes.SelectNodes(@"tr");
 
-            power.powerLists.Clear();
+            powerLists.Clear();
             foreach (var i in list)
             {
                 var list2 = i.SelectNodes(@"td");
                 if(list2!=null)
                 {
-                    power.powerLists.Add(new PowerList(list2[1].InnerText, list2[0].InnerText));
+                    powerLists.Add(new PowerList(list2[1].InnerText, list2[0].InnerText));
                 }
             }
 
-            return power;
         }
 
         private static void set_para(string result)

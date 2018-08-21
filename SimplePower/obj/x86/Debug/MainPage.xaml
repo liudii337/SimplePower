@@ -9,7 +9,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock x:ConnectionId='2' x:Name="result_text"/>
+        <StackPanel>
+            <TextBlock x:ConnectionId='2' x:Name="result_text"/>
+            <Button x:ConnectionId='3' Content="press"                     />
+        </StackPanel>
+        
     </Grid>
 </Page>
 

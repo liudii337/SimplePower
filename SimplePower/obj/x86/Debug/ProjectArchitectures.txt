@@ -1,1 +1,1 @@
-F:\文档\GitHub\SimplePower\SimplePower\SimplePower.csproj;x86
+E:\C#\SimplePower\SimplePower\SimplePower.csproj;x86

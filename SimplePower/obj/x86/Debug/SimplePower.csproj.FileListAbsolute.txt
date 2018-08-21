@@ -439,3 +439,12 @@ F:\文档\GitHub\SimplePower\SimplePower\obj\x86\Debug\resources.en-us.resfiles
 F:\文档\GitHub\SimplePower\SimplePower\obj\x86\Debug\resources.en-us.resfiles.intermediate
 F:\文档\GitHub\SimplePower\SimplePower\obj\x86\Debug\HtmlAgilityPack.pri.xml
 F:\文档\GitHub\SimplePower\SimplePower\obj\x86\Debug\ProjectArchitectures.txt
+E:\C#\SimplePower\SimplePower\bin\x86\Debug\HtmlAgilityPack.dll
+E:\C#\SimplePower\SimplePower\bin\x86\Debug\HtmlAgilityPack.pdb
+E:\C#\SimplePower\SimplePower\bin\x86\Debug\System.Xml.XPath.dll
+E:\C#\SimplePower\SimplePower\bin\x86\Debug\System.Xml.XPath.XDocument.dll
+E:\C#\SimplePower\SimplePower\bin\x86\Debug\System.Xml.XPath.XmlDocument.dll
+E:\C#\SimplePower\SimplePower\obj\x86\Debug\FxResources.System.Xml.XPath.SR.resw
+E:\C#\SimplePower\SimplePower\obj\x86\Debug\FxResources.System.Xml.XPath.XDocument.SR.resw
+E:\C#\SimplePower\SimplePower\obj\x86\Debug\FxResources.System.Xml.XPath.XmlDocument.SR.resw
+E:\C#\SimplePower\SimplePower\obj\x86\Debug\HtmlAgilityPack.pri.xml

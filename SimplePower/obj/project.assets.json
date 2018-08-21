@@ -26713,19 +26713,19 @@
       ]
     },
     "System.Private.ServiceModel/4.1.3": {
-      "sha512": "PS9pmdXqvLxxt02jF7Lrbq0kBi+IQGhVOP38V6Wv5IlUW2vFVBbtPb2euhl7bJsh80paIeUEjjA3QtvgMVE7Vw==",
+      "sha512": "XMGmlPfRAKNT/GTHNp/RM2DJ3L4Q7I7jdkWGsCP2NcmuPrO4oKUT5eWS9/z+KPQoB2lLW0KclE4n4EuAOdBDvg==",
       "type": "package",
       "path": "system.private.servicemodel/4.1.3",
       "files": [
         ".signature.p7s",
+        "System.Private.ServiceModel.4.1.3.nupkg.sha512",
+        "System.Private.ServiceModel.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "ref/netstandard/_._",
         "runtimes/unix/lib/netstandard1.3/System.Private.ServiceModel.dll",
         "runtimes/win7/lib/netcore50/System.Private.ServiceModel.dll",
-        "runtimes/win7/lib/netstandard1.3/System.Private.ServiceModel.dll",
-        "system.private.servicemodel.4.1.3.nupkg.sha512",
-        "system.private.servicemodel.nuspec"
+        "runtimes/win7/lib/netstandard1.3/System.Private.ServiceModel.dll"
       ]
     },
     "System.Private.Uri/4.3.0": {
@@ -28424,11 +28424,13 @@
       ]
     },
     "System.ServiceModel.Security/4.0.4": {
-      "sha512": "TYSUCu8ejtp+8CLznJR57GS/LTR+wIGV6RlehUYwZImOhqnMvCRH35G0SXqbGrUd7wThlD+DowRHU3LivG89Mg==",
+      "sha512": "UrpkR8UEKHbdPIaJI9yfgQ3EPYke8fW7VE7mzuY8Pg+fCfE6XLp7rx+ZBUf4VFxmG4w6Ql87CAAGIAZSEnRF+A==",
       "type": "package",
       "path": "system.servicemodel.security/4.0.4",
       "files": [
         ".signature.p7s",
+        "System.ServiceModel.Security.4.0.4.nupkg.sha512",
+        "System.ServiceModel.Security.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/net45/_._",
@@ -28443,9 +28445,7 @@
         "ref/netstandard1.1/System.ServiceModel.Security.dll",
         "ref/portable-net45+win8+wp8/_._",
         "ref/win8/_._",
-        "ref/wp8/_._",
-        "system.servicemodel.security.4.0.4.nupkg.sha512",
-        "system.servicemodel.security.nuspec"
+        "ref/wp8/_._"
       ]
     },
     "System.Text.Encoding/4.3.0": {
@@ -29396,11 +29396,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\文档\\GitHub\\SimplePower\\SimplePower\\SimplePower.csproj",
+      "projectUniqueName": "E:\\C#\\SimplePower\\SimplePower\\SimplePower.csproj",
       "projectName": "SimplePower",
-      "projectPath": "F:\\文档\\GitHub\\SimplePower\\SimplePower\\SimplePower.csproj",
+      "projectPath": "E:\\C#\\SimplePower\\SimplePower\\SimplePower.csproj",
       "packagesPath": "C:\\Users\\liudi\\.nuget\\packages\\",
-      "outputPath": "F:\\文档\\GitHub\\SimplePower\\SimplePower\\obj\\",
+      "outputPath": "E:\\C#\\SimplePower\\SimplePower\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [

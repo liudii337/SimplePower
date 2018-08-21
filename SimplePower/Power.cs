@@ -21,14 +21,12 @@ namespace SimplePower
         public string region { get; set; }
         public string department_num { get; set; }
         public string domitory_num { get; set; }
-        public List<PowerList> powerLists { get; set; }
 
         public Power(string region1,string department,string domitory)
         {
             region = region1;
             department_num = department;
             domitory_num = domitory;
-            powerLists = new List<PowerList>();
         }
     }
 }

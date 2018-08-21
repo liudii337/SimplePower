@@ -24,18 +24,20 @@ namespace SimplePower
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private ObservableCollection<PowerList> powerLists { get; set; }
+
         public MainPage()
         {
             this.InitializeComponent();
-            var test1 = new Power("西区", "西9舍", "230");
-            Task<Power> task= myhttp.GetPower(test1);
-            var test2 = task.Result;
+            powerLists = new ObservableCollection<PowerList>();
+            var power_info = new Power("西区", "西9舍", "230");
+            myhttp.GetPower(power_info,powerLists);
             Task.Delay(10000);
         }
 
-        public void Button1_Click(object sender, EventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            result_text.Text = test2.powerLists[0].value.ToString();
+            result_text.Text = powerLists[0].value.ToString();
         }
     }
 }
