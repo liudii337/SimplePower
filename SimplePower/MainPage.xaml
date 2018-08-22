@@ -9,9 +9,26 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel>
-            <TextBlock x:Name="result_text"/>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="200">
+            <ComboBox x:Name="region_box" 
+                      ItemsSource="{x:Bind region_Lists}" 
+                      SelectionChanged="region_box_SelectionChanged"
+                      PlaceholderText="请选择"/>
+            <ComboBox x:Name="department_box" 
+                      ItemsSource="{x:Bind department_Lists}" 
+                      PlaceholderText="请选择"/>
+            <TextBox x:Name="donitory_box"/>
             <Button Content="press" Click="Button_Click"/>
+            <ListView ItemsSource="{x:Bind powerLists}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:PowerList">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Bind value}"/>
+                            <TextBlock Text="{x:Bind time}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
         
     </Grid>

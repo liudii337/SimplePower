@@ -25,19 +25,38 @@ namespace SimplePower
     public sealed partial class MainPage : Page
     {
         private ObservableCollection<PowerList> powerLists { get; set; }
+        private ObservableCollection<String> region_Lists { get; set; }
+        private ObservableCollection<String> department_Lists { get; set; }
+
 
         public MainPage()
         {
             this.InitializeComponent();
             powerLists = new ObservableCollection<PowerList>();
-            var power_info = new Power("西区", "西9舍", "230");
-            myhttp.GetPower(power_info,powerLists);
+            region_Lists = new ObservableCollection<string>();
+            department_Lists = new ObservableCollection<string>();
+
+            myhttp.GetList_region(region_Lists);
+
             Task.Delay(10000);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            result_text.Text = powerLists[0].value.ToString();
+            var region_selection = (string)region_box.SelectedItem;
+            var department_selection = (string)department_box.SelectedItem;
+            var domitory_selection = donitory_box.Text;
+
+
+            var power_info = new Power("西区", "西9舍", "230");
+            myhttp.GetPower(power_info, powerLists);
+
+        }
+
+        private void region_box_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selection = (string)region_box.SelectedItem;
+            myhttp.GetList_dormitory(selection, department_Lists);
         }
     }
 }

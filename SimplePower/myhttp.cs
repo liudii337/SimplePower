@@ -18,12 +18,12 @@ namespace SimplePower
         private static String __VIEWSTATE { get; set; }
         private static String __EVENTVALIDATION { get; set; }
         private static List<KeyValuePair<String, String>> paramList { get; set; }
+        private static string url = "http://202.114.18.218/main.aspx";
 
         public async static Task GetPower(Power power,ObservableCollection<PowerList> powerLists)
         {
             var http = new HttpClient();
             paramList = new List<KeyValuePair<string, string>>();
-            string url = "http://202.114.18.218/main.aspx";
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
             var response = await http.GetAsync(url);
             string result = response.Content.ReadAsStringAsync().Result;
@@ -65,7 +65,58 @@ namespace SimplePower
                     powerLists.Add(new PowerList(list2[1].InnerText, list2[0].InnerText));
                 }
             }
+        }
 
+        public async static Task GetList_region(ObservableCollection<String> regionLists)
+        {
+            var http = new HttpClient();
+            paramList = new List<KeyValuePair<string, string>>();
+            http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
+            var response = await http.GetAsync(url);
+            string result = response.Content.ReadAsStringAsync().Result;
+            //初始化文档
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(result);
+            //查找节点
+            var titleNodes = doc.DocumentNode.SelectSingleNode("//select[@name='programId']");
+            var list = titleNodes.SelectNodes(@"option");
+
+            regionLists.Clear();
+            foreach (var i in list)
+            {
+                if (i != null)
+                {regionLists.Add(i.InnerText);}
+            }
+        }
+
+        public async static Task GetList_dormitory(string region, ObservableCollection<String> department_Lists)
+        {
+            var http = new HttpClient();
+            paramList = new List<KeyValuePair<string, string>>();
+            http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
+            var response = await http.GetAsync(url);
+            string result = response.Content.ReadAsStringAsync().Result;
+            //获取到两个参数，传区域
+            set_para(result);
+            set_paraList("programId", region, Empty, Empty, Empty, Empty);
+
+            await Task.Delay(100);
+            response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
+            result = response.Content.ReadAsStringAsync().Result;
+
+            //初始化文档
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(result);
+            //查找节点
+            var titleNodes = doc.DocumentNode.SelectSingleNode("//select[@name='txtyq']");
+            var list = titleNodes.SelectNodes(@"option");
+
+            department_Lists.Clear();
+            foreach (var i in list)
+            {
+                if (i != null)
+                {department_Lists.Add(i.InnerText);}
+            }
         }
 
         private static void set_para(string result)
