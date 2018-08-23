@@ -84,7 +84,7 @@ namespace SimplePower
             regionLists.Clear();
             foreach (var i in list)
             {
-                if (i != null)
+                if (i != null&&i.InnerText!="-请选择-")
                 {regionLists.Add(i.InnerText);}
             }
         }
@@ -114,8 +114,8 @@ namespace SimplePower
             department_Lists.Clear();
             foreach (var i in list)
             {
-                if (i != null)
-                {department_Lists.Add(i.InnerText);}
+                if (i != null && i.InnerText != "-请选择-")
+                { department_Lists.Add(i.InnerText);}
             }
         }
 
