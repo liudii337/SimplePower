@@ -56,7 +56,12 @@
                       PlaceholderText="请选择" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Text="宿舍号：" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 <TextBox x:Name="donitory_box" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <Button Content="查询" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Click="Button_Click" Margin="0,10,0,10"/>
+                <CheckBox x:Name="Save_box" Content="设为我的宿舍" 
+                          Grid.Row="3" Grid.Column="1" 
+                          VerticalAlignment="Center" HorizontalAlignment="Center"
+                          Checked="Save_setting_Checked"
+                          Unchecked="Save_setting_Unchecked"/>
+                <Button Content="查询" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="Button_Click" Margin="0,10,0,10"/>
             </Grid>
             <ListView ItemsSource="{x:Bind powerLists}" Grid.Row="2" Height="320">
                 <ListView.ItemTemplate>

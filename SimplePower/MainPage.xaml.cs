@@ -27,6 +27,7 @@ namespace SimplePower
         private ObservableCollection<PowerList> powerLists { get; set; }
         private ObservableCollection<String> region_Lists { get; set; }
         private ObservableCollection<String> department_Lists { get; set; }
+        private bool setting_save = false; 
 
 
         public MainPage()
@@ -37,6 +38,18 @@ namespace SimplePower
             department_Lists = new ObservableCollection<string>();
 
             myhttp.GetList_region(region_Lists);
+            if(Data_storage.read_para("setting_save")!=null)
+            {
+                setting_save = (bool)Data_storage.read_para("setting_save");
+                Save_box.IsChecked = setting_save;
+                if(setting_save)
+                {
+                    var power_info =(Power) Data_storage.read_power();
+                    myhttp.GetPower(power_info, powerLists);
+
+                }
+            }
+
 
             Task.Delay(10000);
         }
@@ -48,7 +61,13 @@ namespace SimplePower
             var domitory_selection = donitory_box.Text;
 
 
-            var power_info = new Power("西区", "西9舍", "230");
+            var power_info = new Power(region_selection, department_selection, domitory_selection);
+
+            if(setting_save)
+            {
+                Data_storage.save_power(power_info);
+            }
+
             myhttp.GetPower(power_info, powerLists);
 
         }
@@ -57,6 +76,20 @@ namespace SimplePower
         {
             var selection = (string)region_box.SelectedItem;
             myhttp.GetList_dormitory(selection, department_Lists);
+        }
+
+        private void Save_setting_Checked(object sender, RoutedEventArgs e)
+        {
+            //保存数据
+            setting_save = true;
+            Data_storage.save_para("setting_save", true);
+        }
+
+        private void Save_setting_Unchecked(object sender, RoutedEventArgs e)
+        {
+            //保存数据
+            setting_save = false;
+            Data_storage.save_para("setting_save", false);
         }
     }
 }
