@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loading="Page_Loading">
 
     <Grid Background="{StaticResource SystemControlAcrylicWindowBrush}">
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -22,10 +23,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Background="#FFFF5D00"/>
-                <Grid Grid.Column="1" Background="#FFE8FF00"/>
-                <Grid Grid.Column="2" Background="#FF0080FF"/>
-                <Grid Grid.Column="3" Background="#FF00805D"/>
+                <Grid Grid.Column="3" Background="#FFFF8B00"/>
+                <Grid Grid.Column="0" Background="#FFE8FF00"/>
+                <Grid Grid.Column="1" Background="#FF0080FF"/>
+                <Grid Grid.Column="2" Background="#FF42D333"/>
             </Grid>
             <Grid Grid.Row="1"
                Width="300"

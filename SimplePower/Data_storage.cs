@@ -20,11 +20,32 @@ namespace SimplePower
 
         public static Power read_power()
         {
-            var region = read_para("region").ToString();
-            var department_num = read_para("department_num").ToString();
-            var domitory_num = read_para("domitory_num").ToString();
-            var power_info = new Power(region,department_num,domitory_num);
-            return power_info;
+            if (localSettings.Values.ContainsKey("region"))
+            {
+                var region = read_para("region").ToString();
+                var department_num = read_para("department_num").ToString();
+                var domitory_num = read_para("domitory_num").ToString();
+                var power_info = new Power(region, department_num, domitory_num);
+                return power_info;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static void remove_power()
+        {
+            if (localSettings.Values.ContainsKey("region"))
+            {
+                remove_para("region");
+                remove_para("department_num");
+                remove_para("domitory_num");
+            }
+            else
+            {
+                //
+            }
         }
 
         public static void save_para(string key,object value)
