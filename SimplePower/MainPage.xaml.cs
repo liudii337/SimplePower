@@ -68,7 +68,21 @@ namespace SimplePower
 
             power_info = new Power(region_selection, department_selection, domitory_selection);
 
-            myhttp.GetPower(power_info, powerLists);
+            if (region_selection == null && department_selection == null && domitory_selection == "薛楠楠")
+                surprise_box.Text = "你咋知道我家女神名字？";
+            else if(region_selection == null && department_selection == null && domitory_selection == "楠楠")
+            {
+                surprise_box.Text = "这个名字最好听了~";
+            }
+            else if (region_selection == null && department_selection == null && domitory_selection == "楠宝")
+            {
+                surprise_box.Text = "全称应该是可爱温柔楠楠大宝宝";
+            }
+            else
+            {
+                surprise_box.Text = "";
+                myhttp.GetPower(power_info, powerLists);
+            }
         }
 
         private void region_box_SelectionChanged(object sender, SelectionChangedEventArgs e)
