@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SimplePower
 {
-    class myhttp
+    public class myhttp
     {
         private static readonly String Empty = "";
         private static String __VIEWSTATE { get; set; }
@@ -22,6 +22,7 @@ namespace SimplePower
 
         public async static Task GetPower(Power power,ObservableCollection<PowerList> powerLists)
         {
+            powerLists.Clear();
             var http = new HttpClient();
             paramList = new List<KeyValuePair<string, string>>();
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
@@ -56,7 +57,6 @@ namespace SimplePower
             var titleNodes = doc.DocumentNode.SelectSingleNode("//table[@rules='all']");
             var list = titleNodes.SelectNodes(@"tr");
 
-            powerLists.Clear();
             foreach (var i in list)
             {
                 var list2 = i.SelectNodes(@"td");

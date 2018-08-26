@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimplePower
 {
-    class PowerList
+    public class PowerList
     {
         public DateTime time;
         public float value;
@@ -16,7 +16,7 @@ namespace SimplePower
             value = float.Parse(Value);
         }
     }
-    class Power
+    public class Power
     {
         public string region { get; set; }
         public string department_num { get; set; }

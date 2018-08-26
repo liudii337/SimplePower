@@ -7,7 +7,7 @@ using Windows.Storage;
 
 namespace SimplePower
 {
-    class Data_storage
+    public class Data_storage
     {
         public static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 

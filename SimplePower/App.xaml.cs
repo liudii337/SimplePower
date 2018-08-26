@@ -1,12 +1,17 @@
-﻿using System;
+﻿using BackgroundTask;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,7 +42,7 @@ namespace SimplePower
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -57,6 +62,7 @@ namespace SimplePower
 
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
+                await RegisterLiveTileTask();
             }
 
             if (e.PrelaunchActivated == false)
@@ -95,6 +101,37 @@ namespace SimplePower
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
+        }
+
+        private const string LIVETILETASK = "LiveTileTask";
+        private async Task RegisterLiveTileTask()
+        {
+            var status = await BackgroundExecutionManager.RequestAccessAsync();
+            if (status == BackgroundAccessStatus.Unspecified || status == BackgroundAccessStatus.DeniedBySystemPolicy)
+            {
+                return;
+            }
+
+            foreach (var cur in BackgroundTaskRegistration.AllTasks)
+            {
+                if (cur.Value.Name == LIVETILETASK)
+                {
+                    cur.Value.Unregister(true);
+                }
+            }
+
+            var taskBuilder = new BackgroundTaskBuilder
+            {
+                Name = LIVETILETASK,
+                TaskEntryPoint = typeof(LiveTileTask).FullName
+            };
+
+            taskBuilder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
+
+            taskBuilder.SetTrigger(new TimeTrigger(60, false));
+            taskBuilder.Register();
+
+            Debug.WriteLine($"Task registered successfully.");
         }
     }
 }
