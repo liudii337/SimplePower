@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
+using Windows.UI;
 using Windows.UI.Notifications;
+
 
 namespace SimplePower.Core
 {
-    public class TileNotification
+    public class TileNotificationHelper
     {
         public static void ShowToastNotification(string text, NotificationAudioNames audioName)
         {
@@ -87,7 +90,7 @@ namespace SimplePower.Core
 
         public static void CleanTileNotification()
         {
-            var notif = Windows.UI.Notifications.TileUpdateManager.CreateTileUpdaterForApplication();
+            var notif = TileUpdateManager.CreateTileUpdaterForApplication();
             notif.EnableNotificationQueue(true);
             notif.Clear();
         }
@@ -112,7 +115,7 @@ namespace SimplePower.Core
 					    </binding>  
                      </visual>
                     </tile>
-";
+                    ";
 
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
@@ -131,87 +134,25 @@ namespace SimplePower.Core
 
         }
 
-        public static void UpdateTitleNotification(List<CountDown> lcd)
+        public static void UpdateTitleNotification(Power power_info, ObservableCollection<PowerList> powerLists)
         {
 
             CleanTileNotification();
+            string title="", content="";
+            string image = "ms-appx:///Assets/NoResult.png";
 
-            List<CountDown> notiCountDowns = new List<CountDown>();
-            for (int i = 0; i < lcd.Count; i++)
+            if (powerLists.Count()>0)
             {
-                for (int j = i; j < lcd.Count; j++)
-                {
-                    if (TimeHelper.TotalDays(lcd[i].Time) > TimeHelper.TotalDays(lcd[j].Time))
-                    {
-                        CountDown temp = lcd[i];
-                        lcd[i] = lcd[j];
-                        lcd[j] = temp;
-                    }
-                }
+                title = string.Format("{0}-{1}", power_info.department_num,power_info.domitory_num);
+                content = string.Format("还剩{0}度电{1}",powerLists[0].value,DateTime.Now.ToString());
             }
 
-            if (lcd.Count > 5)
-            {
-                int non0index = -1;
-                int non0count = 0;
-                for (int i = 0; i < lcd.Count; i++)
-                {
-                    if (TimeHelper.TotalDays(lcd[i].Time) >= 0)
-                    {
-                        if (non0index == -1) non0index = i;
-                        non0count++;
-                    }
-                }
-
-                if (non0count < 5)
-                {
-                    notiCountDowns.Add(lcd[lcd.Count - 5]);
-                    notiCountDowns.Add(lcd[lcd.Count - 4]);
-                    notiCountDowns.Add(lcd[lcd.Count - 3]);
-                    notiCountDowns.Add(lcd[lcd.Count - 2]);
-                    notiCountDowns.Add(lcd[lcd.Count - 1]);
-                }
-                else
-                {
-                    notiCountDowns.Add(lcd[non0index]);
-                    notiCountDowns.Add(lcd[non0index + 1]);
-                    notiCountDowns.Add(lcd[non0index + 2]);
-                    notiCountDowns.Add(lcd[non0index + 3]);
-                    notiCountDowns.Add(lcd[non0index + 4]);
-                }
-
-            }
-            else
-            {
-                notiCountDowns = lcd;
-            }
-
-            foreach (CountDown cd in notiCountDowns)
-            {
-                string Title = cd.Title;
-                int totalDays = TimeHelper.TotalDays(cd.Time);
-                string Content = "";
-                if (totalDays < 0)
-                {
-                    Content = "已经过去了" + (0 - totalDays).ToString() + "天";
-                }
-                else if (totalDays == 0)
-                {
-                    Content = "就在今天";
-                }
-                else if (totalDays > 0)
-                {
-                    Content = "还差" + totalDays.ToString() + "天";
-                }
-                ShowTileNotification(Title, Content, cd.Picture);
-            }
+            ShowTileNotification(title, content, image);
         }
 
         public async static Task UpdateTitleNotification()
         {
-            LocateCutDownHelper lcdh = new LocateCutDownHelper();
-            await lcdh.Read();
-            UpdateTitleNotification(lcdh.CountDowns);
+            //UpdateTitleNotification(lcdh.CountDowns);
         }
 
     }

@@ -1,7 +1,9 @@
 ﻿using SimplePower;
+using SimplePower.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +28,8 @@ namespace BackgroundTask
                     powerLists = new ObservableCollection<PowerList>();
                     await myhttp.GetPower(power_info, powerLists);
 
-
+                    TileNotificationHelper.UpdateTitleNotification(power_info, powerLists);
+                    Debug.WriteLine($"Task launched successfully.");
 
                 }
             }
