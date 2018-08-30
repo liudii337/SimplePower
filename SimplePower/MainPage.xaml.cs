@@ -128,7 +128,8 @@ namespace SimplePower
                 if (setting_save && Data_storage.read_power() != null)
                 {
                     power_info = (Power)Data_storage.read_power();
-                    myhttp.GetPower(power_info, powerLists);
+                    await myhttp.GetPower(power_info, powerLists);
+                    TileNotificationHelper.UpdateTitleNotification(power_info, powerLists);
 
                     //region_box.SelectedValue = power_info.region;
 

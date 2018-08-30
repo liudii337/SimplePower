@@ -95,19 +95,20 @@ namespace SimplePower.Core
             notif.Clear();
         }
 
-        public static void ShowTileNotification(string Title, string Content, string Image)
+        public static void ShowTileNotification(string Title, string Content, string Image,string updateTime,string add_text)
         {
             string xml = $@"
                     <tile>
-                     <visual>
-                       <binding template='TileSquareText02'>
-                        <text id='1'>{Title}</text>
-                        <text id='2'>{Content}</text>
+                     <visual branding='nameAndLogo'>
+                       <binding template='TileMedium' displayName='{updateTime}' branding='name' hint-textStacking='center'>
+                        <text hint-align='center' hint-style='caption'>{Title}</text>
+                        <text hint-align='center' hint-style='title'>{Content}</text>
+                        <text hint-align='center' hint-style='caption'>{add_text}</text>
                        </binding>  
  					   <binding template='TileWideText02'>
  					     <text id='1'>{Title}</text>
- 					     <text id='2'>{Content}</text>
-  					  </binding>  
+ 					     <text id='2'><SymbolIcon Symbol='Refresh'/></text>
+                        </binding>  
 					    <binding template='TileSquare310x310ImageAndTextOverlay02'>
 					      <image id='1' src='{Image}' alt='alt text'/>
 					      <text id='1'>{Title}</text>
@@ -138,16 +139,25 @@ namespace SimplePower.Core
         {
 
             CleanTileNotification();
-            string title="", content="";
-            string image = "ms-appx:///Assets/NoResult.png";
+            string title="", content="", updateTime="",add_text="";
+            string image = "Assets/Refreshicon.png";
 
             if (powerLists.Count()>0)
             {
                 title = string.Format("{0}-{1}", power_info.department_num,power_info.domitory_num);
-                content = string.Format("还剩{0}度电{1}",powerLists[0].value,DateTime.Now.ToString());
+                content = string.Format("{0}°",powerLists[0].value);
+                updateTime= string.Format("📡{0}:{1}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+                if(powerLists[0].value>20)
+                {
+                    add_text = "电量充足";
+                }
+                else
+                {
+                    add_text = "尽快充电";
+                }
             }
 
-            ShowTileNotification(title, content, image);
+            ShowTileNotification(title, content, image, updateTime,add_text);
         }
 
         public async static Task UpdateTitleNotification()
