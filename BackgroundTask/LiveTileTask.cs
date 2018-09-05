@@ -27,10 +27,10 @@ namespace BackgroundTask
                     Power power_info = Data_storage.read_power();
                     powerLists = new ObservableCollection<PowerList>();
                     await myhttp.GetPower(power_info, powerLists);
-
-                    TileNotificationHelper.UpdateTitleNotification(power_info, powerLists);
-                    Debug.WriteLine($"Task launched successfully.");
-
+                    if (Data_storage.read_para("tile_enable") != null&&(bool) Data_storage.read_para("tile_enable")==true)
+                    {
+                        TileNotificationHelper.UpdateTitleNotification(power_info, powerLists);
+                    }
                 }
             }
 

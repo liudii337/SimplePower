@@ -128,7 +128,7 @@ namespace SimplePower
 
             taskBuilder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
 
-            taskBuilder.SetTrigger(new TimeTrigger(180, false));
+            taskBuilder.SetTrigger(new TimeTrigger(90, false));
             taskBuilder.Register();
 
             Debug.WriteLine($"Task registered successfully.");

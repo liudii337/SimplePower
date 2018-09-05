@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 using Windows.UI;
 using Windows.UI.Notifications;
-
+using Windows.UI.Popups;
+using Windows.UI.StartScreen;
 
 namespace SimplePower.Core
 {
@@ -95,7 +96,7 @@ namespace SimplePower.Core
             notif.Clear();
         }
 
-        public static void ShowTileNotification(string Title, string Content, string Image,string updateTime,string add_text)
+        public static void ShowTileNotification(string Title, string Content, string Image,string updateTime,string add_text,string lastday)
         {
             string xml = $@"
                     <tile>
@@ -105,9 +106,17 @@ namespace SimplePower.Core
                         <text hint-align='center' hint-style='title'>{Content}</text>
                         <text hint-align='center' hint-style='caption'>{add_text}</text>
                        </binding>  
- 					   <binding template='TileWideText02'>
- 					     <text id='1'>{Title}</text>
- 					     <text id='2'><SymbolIcon Symbol='Refresh'/></text>
+ 					   <binding template='TileWide' displayName='{updateTime} {Title}' branding='name' hint-textStacking='center'>
+ 					     <group>
+                            <subgroup hint-weight='1'>
+                                <text hint-align='center' hint-style='caption'>电量剩余</text>
+                                <text hint-align='center' hint-style='title'>{Content}</text>
+                            </subgroup>
+                            <subgroup hint-weight='1'>
+                                <text hint-align='center' hint-style='caption'>昨日消耗</text>
+                                <text hint-align='center' hint-style='title'>{lastday}</text>
+                            </subgroup>
+                         </group>
                         </binding>  
 					    <binding template='TileSquare310x310ImageAndTextOverlay02'>
 					      <image id='1' src='{Image}' alt='alt text'/>
@@ -139,14 +148,15 @@ namespace SimplePower.Core
         {
 
             CleanTileNotification();
-            string title="", content="", updateTime="",add_text="";
+            string title="", content="", updateTime="",add_text="",lastday="";
             string image = "Assets/Refreshicon.png";
 
             if (powerLists.Count()>0)
             {
                 title = string.Format("{0}-{1}", power_info.department_num,power_info.domitory_num);
                 content = string.Format("{0}°",powerLists[0].value);
-                updateTime= string.Format("📡{0}:{1}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString());
+                updateTime= string.Format("📡{0}", DateTime.Now.ToString("HH:mm"));
+                lastday = string.Format("{0}°", (powerLists[0].value - powerLists[1].value).ToString("f1"));
                 if(powerLists[0].value>20)
                 {
                     add_text = "电量充足";
@@ -157,13 +167,14 @@ namespace SimplePower.Core
                 }
             }
 
-            ShowTileNotification(title, content, image, updateTime,add_text);
+            ShowTileNotification(title, content, image, updateTime,add_text,lastday);
         }
 
         public async static Task UpdateTitleNotification()
         {
             //UpdateTitleNotification(lcdh.CountDowns);
         }
+
 
     }
 
