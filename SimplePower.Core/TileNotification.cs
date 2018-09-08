@@ -14,78 +14,43 @@ namespace SimplePower.Core
 {
     public class TileNotificationHelper
     {
-        public static void ShowToastNotification(string text, NotificationAudioNames audioName)
+        public static void ShowToastNotification(string title, string content)
         {
-            // 1. create element
-            ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
-            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
+            string xml = $@"
+                    <toast scenario='reminder'>
+                        <visual>
+                            <binding template = 'ToastGeneric'>        
+                                <text hint-maxLines='1'>{title}</text>
+                                <text>{content}</text>
+                                <image placement='appLogoOverride' src='Assets/icon-battery.png'/>
+                                <image placement='hero' src='Assets/position.png'/>
+                            </binding>
+                        </visual>
+                    </toast>
+                    ";
 
-            // 2. provide text
-            XmlNodeList toastTextElements = toastXml.GetElementsByTagName("text");
-            toastTextElements[0].AppendChild(toastXml.CreateTextNode(text));
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
 
-            // 3. provide image
-            //XmlNodeList toastImageAttributes = toastXml.GetElementsByTagName("image");
-            //((XmlElement)toastImageAttributes[0]).SetAttribute("src", $"ms-appx:///assets/{assetsImageFileName}");
-            //((XmlElement)toastImageAttributes[0]).SetAttribute("alt", "logo");
-
-            // 4. duration
-            IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
-            ((XmlElement)toastNode).SetAttribute("duration", "short");
-
-            // 5. audio
-            XmlElement audio = toastXml.CreateElement("audio");
-            audio.SetAttribute("src", $"ms-winsoundevent:Notification.{audioName.ToString().Replace("_", ".")}");
-            toastNode.AppendChild(audio);
-
-            // 6. app launch parameter
-            //((XmlElement)toastNode).SetAttribute("launch", "{\"type\":\"toast\",\"param1\":\"12345\",\"param2\":\"67890\"}");
-
-            // 7. send toast
-            ToastNotification toast = new ToastNotification(toastXml);
+            ToastNotification toast = new ToastNotification(doc);
             ToastNotificationManager.CreateToastNotifier().Show(toast);
+
+
         }
 
-        public static void ShowToastNotification(string text, string parameter, NotificationAudioNames audioName)
+        public static void UpdateToastNotification(ObservableCollection<PowerList> powerLists,float limitation)
         {
-            // 1. create element
-            ToastTemplateType toastTemplate = ToastTemplateType.ToastImageAndText01;
-            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(toastTemplate);
+            string content = "请尽快充电";
+            string title = "";
 
-            // 2. provide text
-            XmlNodeList toastTextElements = toastXml.GetElementsByTagName("text");
-            toastTextElements[0].AppendChild(toastXml.CreateTextNode(text));
-
-            // 3. provide image
-            //XmlNodeList toastImageAttributes = toastXml.GetElementsByTagName("image");
-            //((XmlElement)toastImageAttributes[0]).SetAttribute("src", $"ms-appx:///assets/{assetsImageFileName}");
-            //((XmlElement)toastImageAttributes[0]).SetAttribute("alt", "logo");
-
-            // 4. duration
-            IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
-            ((XmlElement)toastNode).SetAttribute("duration", "short");
-
-            // 5. audio
-            XmlElement audio = toastXml.CreateElement("audio");
-            audio.SetAttribute("src", $"ms-winsoundevent:Notification.{audioName.ToString().Replace("_", ".")}");
-            toastNode.AppendChild(audio);
-
-            // 6. app launch parameter
-            ((XmlElement)toastNode).SetAttribute("launch", parameter);
-
-            // 7. send toast
-            ToastNotification toast = new ToastNotification(toastXml);
-            ToastNotificationManager.CreateToastNotifier().Show(toast);
-        }
-
-        public static void ShowToastNotification(string text, string parameter)
-        {
-            ShowToastNotification(text, parameter, NotificationAudioNames.Default);
-        }
-
-        public static void ShowToastNotification(string text)
-        {
-            ShowToastNotification(text, NotificationAudioNames.Default);
+            if (powerLists.Count!=0)
+            {
+                if(powerLists[0].value<limitation)
+                {
+                    title = string.Format("寝室电量仅剩{0}度", powerLists[0].value.ToString());
+                    ShowToastNotification(title,content);
+                }
+            }
         }
 
 
@@ -169,12 +134,6 @@ namespace SimplePower.Core
 
             ShowTileNotification(title, content, image, updateTime,add_text,lastday);
         }
-
-        public async static Task UpdateTitleNotification()
-        {
-            //UpdateTitleNotification(lcdh.CountDowns);
-        }
-
 
     }
 

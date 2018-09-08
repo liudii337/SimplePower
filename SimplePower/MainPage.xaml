@@ -5,9 +5,16 @@
     xmlns:local="using:SimplePower"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Converter="using:SimplePower.Converter"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loading="Page_Loading">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <Converter:Float_Visibility x:Key="Converter" />
+        </ResourceDictionary>
+    </Page.Resources>
 
     <Grid Background="{StaticResource SystemControlAcrylicWindowBrush}">
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -77,10 +84,18 @@
             <ListView ItemsSource="{x:Bind powerLists}" Grid.Row="2" Height="320">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:PowerList">
-                        <Grid>
-                            <TextBlock Text="{x:Bind value}" HorizontalAlignment="Left"/>
-                            <TextBlock Text="{x:Bind time}" HorizontalAlignment="Right"/>
-                        </Grid>
+                        <RelativePanel>
+                            <TextBlock Text="{x:Bind value}" 
+                                       x:Name="value_box" 
+                                       Margin="0,0,5,0"
+                                       RelativePanel.AlignLeftWithPanel="True"/>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" 
+                                      Glyph="&#xE171;" Foreground="Red" 
+                                      RelativePanel.RightOf="value_box" 
+                                      Visibility="{x:Bind value, Converter={StaticResource Converter},Mode=OneWay}" />
+                            <TextBlock Text="{x:Bind time}"
+                                       RelativePanel.AlignRightWithPanel="True"/>
+                        </RelativePanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.ItemContainerStyle>

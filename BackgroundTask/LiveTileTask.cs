@@ -30,6 +30,7 @@ namespace BackgroundTask
                     if (Data_storage.read_para("tile_enable") != null&&(bool) Data_storage.read_para("tile_enable")==true)
                     {
                         TileNotificationHelper.UpdateTitleNotification(power_info, powerLists);
+                        TileNotificationHelper.UpdateToastNotification(powerLists, 20);
                     }
                 }
             }

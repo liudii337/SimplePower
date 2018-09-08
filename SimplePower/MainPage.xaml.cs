@@ -31,6 +31,7 @@ namespace SimplePower
         private ObservableCollection<String> region_Lists { get; set; }
         private ObservableCollection<String> department_Lists { get; set; }
         private Power power_info { get; set; }
+        private float limitation=20;
         private bool setting_save = false;
         private bool start_mode = false;
         private bool tile_enable = false;
@@ -48,7 +49,7 @@ namespace SimplePower
 
         private void App_Suspending(object sender, SuspendingEventArgs e)
         {
-            if(setting_save)
+            if(setting_save && surprise_box.Text!= "该宿舍不存在")
             {
                 var region_selection = (string)region_box.SelectedItem;
                 var department_selection = (string)department_box.SelectedItem;
@@ -84,8 +85,16 @@ namespace SimplePower
             else
             {
                 surprise_box.Text = "";
-                await myhttp.GetPower(power_info, powerLists);
-                if(tile_enable)
+                try
+                {
+                    await myhttp.GetPower(power_info, powerLists);
+                }
+                catch
+                {
+                    surprise_box.Text = "该宿舍不存在";
+                    return;
+                }
+                if (tile_enable)
                 { TileNotificationHelper.UpdateTitleNotification(power_info, powerLists); }
             }
         }
