@@ -17,6 +17,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SimplePower;
 using SimplePower.Core;
+using Windows.UI.ViewManagement;
+using Windows.Foundation.Metadata;
+using Windows.ApplicationModel.Core;
+using Windows.UI;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -35,11 +39,14 @@ namespace SimplePower
         private bool setting_save = false;
         private bool start_mode = false;
         private bool tile_enable = false;
+        StatusBar statusBar;
+
 
 
         public MainPage()
         {
             this.InitializeComponent();
+            SetStatusBar();
             powerLists = new ObservableCollection<PowerList>();
             region_Lists = new ObservableCollection<string>();
             department_Lists = new ObservableCollection<string>();
@@ -146,8 +153,15 @@ namespace SimplePower
             if (setting_save && Data_storage.read_power() != null)
             {
                 power_info = (Power)Data_storage.read_power();
-                await myhttp.GetPower(power_info, powerLists);
-
+                try
+                {
+                    await myhttp.GetPower(power_info, powerLists);
+                }
+                catch
+                {
+                    surprise_box.Text = "网络崩溃了，请检查网络！";
+                    return;
+                }
                 if (tile_enable)
                 { TileNotificationHelper.UpdateTitleNotification(power_info, powerLists); }
                 else
@@ -179,6 +193,34 @@ namespace SimplePower
                 tile_enable = false;
                 Data_storage.save_para("tile_enable", false);
                 TileNotificationHelper.CleanTileNotification();
+            }
+        }
+
+        private void SetStatusBar()
+        {
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+            {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+                if (titleBar != null)
+                {
+                    titleBar.ButtonBackgroundColor = Colors.Transparent;
+                    titleBar.ButtonForegroundColor = Colors.White;
+                    titleBar.BackgroundColor = Colors.Transparent;
+                    titleBar.ForegroundColor = Colors.White;
+
+                    coreTitleBar.ExtendViewIntoTitleBar = true;
+                }
+            }
+
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                statusBar = StatusBar.GetForCurrentView();
+                statusBar.ForegroundColor = Colors.Black;
+                statusBar.BackgroundOpacity = 0;
+
+                var applicationView = ApplicationView.GetForCurrentView();
+                applicationView.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
             }
         }
     }
