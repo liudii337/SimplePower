@@ -39,6 +39,7 @@ namespace SimplePower
         private bool setting_save = false;
         private bool start_mode = false;
         private bool tile_enable = false;
+        private int DisplayIndex=1;
         StatusBar statusBar;
 
 
@@ -104,6 +105,10 @@ namespace SimplePower
                 if (tile_enable)
                 { TileNotificationHelper.UpdateTitleNotification(power_info, powerLists); }
             }
+
+            //set the flipper
+            flipper_control.DisplayIndex = 1;
+            flipper_control.AllowTapToFlip = true;
         }
 
         private void region_box_SelectionChanged(object sender, SelectionChangedEventArgs e)

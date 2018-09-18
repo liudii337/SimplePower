@@ -149,6 +149,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FlipperControl">
+      <Version>1.0.6</Version>
+    </PackageReference>
     <PackageReference Include="HtmlAgilityPack">
       <Version>1.8.7</Version>
     </PackageReference>
