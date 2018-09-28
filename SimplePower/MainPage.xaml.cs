@@ -210,7 +210,9 @@ namespace SimplePower
                 if (titleBar != null)
                 {
                     titleBar.ButtonBackgroundColor = Colors.Transparent;
+                    titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
                     titleBar.ButtonForegroundColor = Colors.White;
+                    titleBar.ButtonInactiveForegroundColor = Colors.White;
                     titleBar.BackgroundColor = Colors.Transparent;
                     titleBar.ForegroundColor = Colors.White;
 
