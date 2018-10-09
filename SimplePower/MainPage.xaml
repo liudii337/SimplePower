@@ -135,7 +135,7 @@
                             Background="#CCFFFFFF">
                         <chart:RadCartesianChart Margin="5" Palette="{StaticResource CustomPalette}">
                             <chart:RadCartesianChart.VerticalAxis>
-                                <chart:LinearAxis />
+                                <chart:LinearAxis  Visibility="Collapsed"/>
                             </chart:RadCartesianChart.VerticalAxis>
                             <chart:RadCartesianChart.HorizontalAxis>
                                 <chart:DateTimeCategoricalAxis DateTimeComponent="Day" LabelFormat="{}{0,0:dd}"/>
@@ -152,7 +152,7 @@
                                     <chart:PropertyNameDataPointBinding PropertyName="time"/>
                                 </chart:BarSeries.CategoryBinding>
                                 <chart:BarSeries.LabelDefinitions>
-                                  <chart:ChartSeriesLabelDefinition HorizontalAlignment="Center" Format="{}{0:0.01}"/>
+                                  <chart:ChartSeriesLabelDefinition HorizontalAlignment="Center" Format="{}{0:N1}"/>
                                 </chart:BarSeries.LabelDefinitions>
                                 <chart:BarSeries.PointTemplateSelector>
                                     <core:BarTemplateSelector Normal_RecTemplate="{StaticResource Normal_Rec}" Warn_RecTemplate="{StaticResource Warn_Rec}"/>
