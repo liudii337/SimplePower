@@ -18,7 +18,7 @@ namespace BackgroundTask
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
             var deferral = taskInstance.GetDeferral();
-            // TODO: 获取数据，更新磁贴逻辑
+            // 获取数据，更新磁贴逻辑
             if (Data_storage.read_para("setting_save") != null)
             {
                 var setting_save = (bool)Data_storage.read_para("setting_save");

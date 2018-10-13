@@ -18,7 +18,7 @@ namespace SimplePower.Core
             PowerList poweritem =(PowerList) ((CategoricalDataPoint)item).DataItem;
             if(poweritem!=null)
             {
-                if (poweritem.value > 50)
+                if (poweritem.Value > 20)
                 {
                     return Normal_RecTemplate;
                 }

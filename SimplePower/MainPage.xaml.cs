@@ -34,25 +34,26 @@ namespace SimplePower
         private ObservableCollection<PowerList> powerLists { get; set; }
         private ObservableCollection<String> region_Lists { get; set; }
         private ObservableCollection<String> department_Lists { get; set; }
+
+        MainViewModel MainVM = new MainViewModel();
+
         private Power power_info { get; set; }
         private float limitation=20;
         private bool setting_save = false;
         private bool start_mode = false;
         private bool tile_enable = false;
-        private int DisplayIndex=1;
         StatusBar statusBar;
-
-
 
         public MainPage()
         {
             this.InitializeComponent();
             SetStatusBar();
-            powerLists = new ObservableCollection<PowerList>();
-            region_Lists = new ObservableCollection<string>();
-            department_Lists = new ObservableCollection<string>();
-            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+            MainVM.PowerLists = new ObservableCollection<PowerList>();
+            MainVM.Region_Lists = new ObservableCollection<string>();
+            MainVM.Department_Lists = new ObservableCollection<string>();
 
+            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+            this.Mychart.DataContext = MainVM;
         }
 
         private void App_Suspending(object sender, SuspendingEventArgs e)
@@ -95,7 +96,7 @@ namespace SimplePower
                 surprise_box.Text = "";
                 try
                 {
-                    await myhttp.GetPower(power_info, powerLists);
+                    await myhttp.GetPower(power_info, MainVM.PowerLists);
                 }
                 catch
                 {
@@ -103,12 +104,9 @@ namespace SimplePower
                     return;
                 }
                 if (tile_enable)
-                { TileNotificationHelper.UpdateTitleNotification(power_info, powerLists); }
+                { TileNotificationHelper.UpdateTitleNotification(power_info, MainVM.PowerLists); }
             }
 
-            //set the flipper
-            flipper_control.DisplayIndex = 1;
-            flipper_control.AllowTapToFlip = true;
         }
 
         private void region_box_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -116,7 +114,7 @@ namespace SimplePower
             if(!start_mode)
             {
                 var selection = (string)region_box.SelectedItem;
-                myhttp.GetList_dormitory(selection, department_Lists);
+                myhttp.GetList_dormitory(selection, MainVM.Department_Lists);
             }
         }
 
@@ -143,7 +141,7 @@ namespace SimplePower
         private async void Page_Loading(FrameworkElement sender, object args)
         {
             start_mode = true;
-            myhttp.GetList_region(region_Lists);
+            myhttp.GetList_region(MainVM.Region_Lists);
 
             if (Data_storage.read_para("setting_save") != null)
             {
@@ -160,7 +158,7 @@ namespace SimplePower
                 power_info = (Power)Data_storage.read_power();
                 try
                 {
-                    await myhttp.GetPower(power_info, powerLists);
+                    await myhttp.GetPower(power_info, MainVM.PowerLists);
                 }
                 catch
                 {
@@ -168,11 +166,11 @@ namespace SimplePower
                     return;
                 }
                 if (tile_enable)
-                { TileNotificationHelper.UpdateTitleNotification(power_info, powerLists); }
+                { TileNotificationHelper.UpdateTitleNotification(power_info, MainVM.PowerLists); }
                 else
                 { TileNotificationHelper.CleanTileNotification(); }
                 
-                await myhttp.GetList_dormitory(power_info.region, department_Lists);
+                await myhttp.GetList_dormitory(power_info.region, MainVM.Department_Lists);
                 region_box.SelectedIndex = region_box.Items.IndexOf(power_info.region);
                 department_box.SelectedIndex = department_box.Items.IndexOf(power_info.department_num);
                 donitory_box.Text = power_info.domitory_num;

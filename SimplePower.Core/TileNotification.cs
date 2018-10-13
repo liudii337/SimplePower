@@ -45,9 +45,9 @@ namespace SimplePower.Core
 
             if (powerLists.Count!=0)
             {
-                if(powerLists[0].value<limitation)
+                if(powerLists[0].Value<limitation)
                 {
-                    title = string.Format("寝室电量仅剩{0}度", powerLists[0].value.ToString());
+                    title = string.Format("寝室电量仅剩{0}度", powerLists[0].Value.ToString());
                     ShowToastNotification(title,content);
                 }
             }
@@ -119,10 +119,10 @@ namespace SimplePower.Core
             if (powerLists.Count()>0)
             {
                 title = string.Format("{0}-{1}", power_info.department_num,power_info.domitory_num);
-                content = string.Format("{0}°",powerLists[0].value);
+                content = string.Format("{0}°",powerLists[0].Value);
                 updateTime= string.Format("📡{0}", DateTime.Now.ToString("HH:mm"));
-                lastday = string.Format("{0}°", (powerLists[0].value - powerLists[1].value).ToString("f1"));
-                if(powerLists[0].value>20)
+                lastday = string.Format("{0}°", (powerLists[0].Value - powerLists[1].Value).ToString("f1"));
+                if(powerLists[0].Value>20)
                 {
                     add_text = "电量充足";
                 }
