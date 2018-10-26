@@ -192,7 +192,7 @@
                         Margin="0,10,0,10" 
                         Background="#FF9CDC3E"/>
                 </Grid>
-                <TextBlock Grid.Row="3" x:Name="surprise_box" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="3" x:Name="surprise_box" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind MainVM.Message,Mode=TwoWay}"/>
                 <flipper:FlipperControl
                     x:Name="flipper_control"
                     AnimationDuration="200"
@@ -206,7 +206,7 @@
                     <flipper:FlipperControl.Views>
                         <Grid VerticalAlignment="Center" 
                             HorizontalAlignment="Center">
-                            <chart:RadCartesianChart Margin="5" Palette="{StaticResource CustomPalette}">
+                            <chart:RadCartesianChart x:Name="Mychart"  Margin="5" Palette="{StaticResource CustomPalette}" EmptyContent="">
                                 <chart:RadCartesianChart.VerticalAxis>
                                     <chart:LinearAxis  Visibility="Collapsed"/>
                                 </chart:RadCartesianChart.VerticalAxis>
@@ -214,10 +214,10 @@
                                     <chart:DateTimeCategoricalAxis Foreground="Black" DateTimeComponent="Day" LabelFormat="{}{0,0:dd}"/>
                                 </chart:RadCartesianChart.HorizontalAxis>
                                 <chart:RadCartesianChart.Grid>
-                                    <chart:CartesianChartGrid MajorLinesVisibility="Y"/>
+                                    <chart:CartesianChartGrid MajorLinesVisibility="Y" />
                                 </chart:RadCartesianChart.Grid>
 
-                                <chart:BarSeries x:Name="Mychart" ShowLabels="True" ItemsSource="{Binding PowerLists}">
+                                <chart:BarSeries ShowLabels="True" ItemsSource="{Binding PowerLists}">
                                     <chart:BarSeries.ValueBinding>
                                         <chart:PropertyNameDataPointBinding PropertyName="Value"/>
                                     </chart:BarSeries.ValueBinding>

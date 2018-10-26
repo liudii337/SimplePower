@@ -52,5 +52,19 @@ namespace SimplePower
             }
         }
 
+        private string message;
+        public string Message
+        {
+            get { return message; }
+            set
+            {
+                if (this.message != value)
+                {
+                    message = value;
+                    this.OnPropertyChanged("Message");
+                }
+            }
+        }
+
     }
 }

@@ -58,7 +58,7 @@ namespace SimplePower
 
         private void App_Suspending(object sender, SuspendingEventArgs e)
         {
-            if(setting_save && surprise_box.Text!= "该宿舍不存在")
+            if(setting_save && MainVM.Message!= "该宿舍不存在")
             {
                 var region_selection = (string)region_box.SelectedItem;
                 var department_selection = (string)department_box.SelectedItem;
@@ -82,25 +82,25 @@ namespace SimplePower
             power_info = new Power(region_selection, department_selection, domitory_selection);
 
             if (region_selection == null && department_selection == null && domitory_selection == "薛楠楠")
-                surprise_box.Text = "你咋知道我家女神名字？";
+                MainVM.Message = "你咋知道我家女神名字？";
             else if(region_selection == null && department_selection == null && domitory_selection == "楠楠")
             {
-                surprise_box.Text = "这个名字最好听了~";
+                MainVM.Message = "这个名字最好听了~";
             }
             else if (region_selection == null && department_selection == null && domitory_selection == "楠宝")
             {
-                surprise_box.Text = "全称应该是可爱温柔楠楠大宝宝";
+                MainVM.Message = "全称应该是可爱温柔楠楠大宝宝";
             }
             else
             {
-                surprise_box.Text = "";
+                MainVM.Message = "";
                 try
                 {
                     await myhttp.GetPower(power_info, MainVM.PowerLists);
                 }
                 catch
                 {
-                    surprise_box.Text = "该宿舍不存在";
+                    MainVM.Message = "该宿舍不存在";
                     return;
                 }
                 if (tile_enable)
@@ -141,7 +141,6 @@ namespace SimplePower
         private async void Page_Loading(FrameworkElement sender, object args)
         {
             start_mode = true;
-            myhttp.GetList_region(MainVM.Region_Lists);
 
             if (Data_storage.read_para("setting_save") != null)
             {
@@ -153,6 +152,19 @@ namespace SimplePower
                 tile_enable = (bool)Data_storage.read_para("tile_enable");
                 Tile_box.IsChecked = tile_enable;
             }
+            try
+            {
+                await myhttp.GetList_region(MainVM.Region_Lists);
+            }
+            catch
+            {
+                if (MainVM.Region_Lists.Count == 0)
+                {
+                    MainVM.Message = "请确保您已经连上华科校园网";
+                    return;
+                }
+            }
+
             if (setting_save && Data_storage.read_power() != null)
             {
                 power_info = (Power)Data_storage.read_power();
@@ -162,9 +174,10 @@ namespace SimplePower
                 }
                 catch
                 {
-                    surprise_box.Text = "网络崩溃了，请检查网络！";
+                    MainVM.Message = "网络崩溃了，请检查网络！";
                     return;
                 }
+
                 if (tile_enable)
                 { TileNotificationHelper.UpdateTitleNotification(power_info, MainVM.PowerLists); }
                 else
