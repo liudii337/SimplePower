@@ -4,5 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:SimplePower"
     RequestedTheme="Light">
+    <Application.Resources>
+        <SolidColorBrush x:Key="BackGround_liu" Color="#FF9CDC3E"/>
+    </Application.Resources>
 
 </Application>

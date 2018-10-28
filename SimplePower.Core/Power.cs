@@ -44,11 +44,29 @@ namespace SimplePower
         public string department_num { get; set; }
         public string domitory_num { get; set; }
 
-        public Power(string region1,string department,string domitory)
+        public Power(string region1, string department, string domitory)
         {
             region = region1;
             department_num = department;
             domitory_num = domitory;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (this.GetType() != obj.GetType())
+                return false;
+            Power other = (Power)obj;
+            if (region != other.region)
+                return false;
+            if (department_num != other.department_num)
+                return false;
+            if (domitory_num != other.domitory_num)
+                return false;
+            return true;
         }
     }
 }

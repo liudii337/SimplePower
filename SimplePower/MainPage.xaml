@@ -15,7 +15,6 @@
 
     <Page.Resources>
         <ResourceDictionary>
-            <SolidColorBrush x:Key="BackGround_liu" Color="#FF9CDC3E"/>
             <Converter:Float_Visibility x:Key="Converter" />
             <Style x:Key="ButtonStyleRound" TargetType="Button">
                 <Setter Property="Background" Value="{ThemeResource ButtonBackground}"/>
@@ -107,10 +106,40 @@
                 </chart:ChartPalette.StrokeEntries>
             </chart:ChartPalette>
             <DataTemplate x:Key="Normal_Rec">
-                <Rectangle Width="30" Fill="#FF9CDC3E" Stroke="Transparent"/>
+                <Grid Background="{StaticResource BackGround_liu}" x:Name="rootgrid" RenderTransformOrigin="1,1" SizeChanged="rootgrid_SizeChanged">
+                    <Grid.Resources>
+                        <Storyboard x:Name="LoadStory">
+                            <DoubleAnimation Duration="0:0:0.5" From="0.5" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="rootgrid" />
+                            <DoubleAnimation Duration="0:0:0.5" From="0.5" To="1" Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="scalegrid" >
+                                <DoubleAnimation.EasingFunction>
+                                    <BounceEase Bounces="2" EasingMode="EaseOut" 
+                                                Bounciness="8" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </Grid.Resources>
+                    <Grid.RenderTransform>
+                        <ScaleTransform x:Name="scalegrid" ScaleX="1" ScaleY="0.5" />
+                    </Grid.RenderTransform>
+                </Grid>
             </DataTemplate>
             <DataTemplate x:Key="Warn_Rec">
-                <Rectangle Width="30" Fill="Red" Stroke="Transparent"/>
+                <Grid Background="Red" x:Name="rootgrid" RenderTransformOrigin="1,1" SizeChanged="rootgrid_SizeChanged">
+                    <Grid.Resources>
+                        <Storyboard x:Name="LoadStory">
+                            <DoubleAnimation Duration="0:0:0.5" From="0.5" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="rootgrid" />
+                            <DoubleAnimation Duration="0:0:0.5" From="0.5" To="1" Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="scalegrid" >
+                                <DoubleAnimation.EasingFunction>
+                                    <BounceEase Bounces="2" EasingMode="EaseOut" 
+                                                Bounciness="8" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </Grid.Resources>
+                    <Grid.RenderTransform>
+                        <ScaleTransform x:Name="scalegrid" ScaleX="1" ScaleY="0.5" />
+                    </Grid.RenderTransform>
+                </Grid>
             </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
@@ -217,7 +246,7 @@
                                     <chart:CartesianChartGrid MajorLinesVisibility="Y" />
                                 </chart:RadCartesianChart.Grid>
 
-                                <chart:BarSeries ShowLabels="True" ItemsSource="{Binding PowerLists}">
+                                <chart:BarSeries ShowLabels="True" ItemsSource="{Binding PowerLists}" >
                                     <chart:BarSeries.ValueBinding>
                                         <chart:PropertyNameDataPointBinding PropertyName="Value"/>
                                     </chart:BarSeries.ValueBinding>

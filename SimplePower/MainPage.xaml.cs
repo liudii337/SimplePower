@@ -21,6 +21,7 @@ using Windows.UI.ViewManagement;
 using Windows.Foundation.Metadata;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
+using Windows.UI.Xaml.Media.Animation;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -79,8 +80,11 @@ namespace SimplePower
             var department_selection = (string)department_box.SelectedItem;
             var domitory_selection = donitory_box.Text;
 
-            power_info = new Power(region_selection, department_selection, domitory_selection);
+            var power_info_format = new Power(region_selection, department_selection, domitory_selection);
 
+            if(power_info.Equals(power_info_format))
+            { return; }
+            power_info = power_info_format;
             if (region_selection == null && department_selection == null && domitory_selection == "薛楠楠")
                 MainVM.Message = "你咋知道我家女神名字？";
             else if(region_selection == null && department_selection == null && domitory_selection == "楠楠")
@@ -240,6 +244,12 @@ namespace SimplePower
                 var applicationView = ApplicationView.GetForCurrentView();
                 applicationView.SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
             }
+        }
+
+        private void rootgrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Storyboard sb = ((Grid)sender).Resources["LoadStory"] as Storyboard;
+            sb.Begin();
         }
     }
 }

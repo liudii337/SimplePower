@@ -22,7 +22,6 @@ namespace SimplePower
 
         public async static Task GetPower(Power power,ObservableCollection<PowerList> powerLists)
         {
-            powerLists.Clear();
             var http = new HttpClient();
             paramList = new List<KeyValuePair<string, string>>();
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
@@ -32,21 +31,21 @@ namespace SimplePower
             set_para(result);
             set_paraList("programId", power.region, Empty, Empty, Empty, Empty);
 
-            await Task.Delay(100);
+            await Task.Delay(20);
             response =await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
             //传楼栋号
             set_para(result);
             set_paraList("txtyq", power.region, power.department_num, Empty, Empty, Empty);
 
-            await Task.Delay(100);
+            await Task.Delay(20);
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
             //传宿舍号
             set_para(result);
             set_paraList(Empty, power.region, power.department_num, power.domitory_num, "65", "19");
 
-            await Task.Delay(100);
+            await Task.Delay(20);
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
 
@@ -57,10 +56,12 @@ namespace SimplePower
             var titleNodes = doc.DocumentNode.SelectSingleNode("//table[@rules='all']");
             var list = titleNodes.SelectNodes(@"tr");
 
+            powerLists.Clear();
             foreach (var i in list)
             {
+
                 var list2 = i.SelectNodes(@"td");
-                if(list2!=null)
+                if (list2 != null)
                 {
                     powerLists.Add(new PowerList(list2[1].InnerText, list2[0].InnerText));
                 }
@@ -100,7 +101,7 @@ namespace SimplePower
             set_para(result);
             set_paraList("programId", region, Empty, Empty, Empty, Empty);
 
-            await Task.Delay(100);
+            await Task.Delay(20);
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
 
