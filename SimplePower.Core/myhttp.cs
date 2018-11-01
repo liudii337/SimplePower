@@ -46,6 +46,7 @@ namespace SimplePower
             set_paraList(Empty, power.region, power.department_num, power.domitory_num, "65", "19");
 
             await Task.Delay(20);
+            powerLists.Clear();
             response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
 
@@ -56,7 +57,6 @@ namespace SimplePower
             var titleNodes = doc.DocumentNode.SelectSingleNode("//table[@rules='all']");
             var list = titleNodes.SelectNodes(@"tr");
 
-            powerLists.Clear();
             foreach (var i in list)
             {
 
