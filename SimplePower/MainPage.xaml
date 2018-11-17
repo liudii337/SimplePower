@@ -229,7 +229,7 @@
                     <flipper:FlipperControl.Views>
                         <Grid VerticalAlignment="Center" 
                             HorizontalAlignment="Center">
-                            <chart:RadCartesianChart x:Name="Mychart"  Margin="5" Palette="{StaticResource CustomPalette}" EmptyContent="">
+                            <chart:RadCartesianChart x:Name="Mychart" Margin="5" Palette="{StaticResource CustomPalette}" EmptyContent="" ClipToBounds="False">
                                 <chart:RadCartesianChart.VerticalAxis>
                                     <chart:LinearAxis  Visibility="Collapsed"/>
                                 </chart:RadCartesianChart.VerticalAxis>
@@ -240,7 +240,7 @@
                                     <chart:CartesianChartGrid MajorLinesVisibility="Y" />
                                 </chart:RadCartesianChart.Grid>
 
-                                <chart:BarSeries ShowLabels="True" ItemsSource="{Binding PowerLists}" >
+                                <chart:BarSeries ShowLabels="True" ItemsSource="{Binding PowerLists}" ClipToPlotArea="False">
                                     <chart:BarSeries.ValueBinding>
                                         <chart:PropertyNameDataPointBinding PropertyName="Value"/>
                                     </chart:BarSeries.ValueBinding>

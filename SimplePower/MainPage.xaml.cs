@@ -82,8 +82,12 @@ namespace SimplePower
 
             var power_info_format = new Power(region_selection, department_selection, domitory_selection);
 
-            if(power_info.Equals(power_info_format))
-            { return; }
+            if(power_info!=null)
+            {
+                if (power_info.Equals(power_info_format))
+                    return;
+            }
+
             power_info = power_info_format;
             if (region_selection == null && department_selection == null && domitory_selection == "薛楠楠")
                 MainVM.Message = "你咋知道我家女神名字？";
