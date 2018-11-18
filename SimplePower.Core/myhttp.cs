@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SimplePower
@@ -18,36 +19,37 @@ namespace SimplePower
         private static String __VIEWSTATE { get; set; }
         private static String __EVENTVALIDATION { get; set; }
         private static List<KeyValuePair<String, String>> paramList { get; set; }
-        private static string url = "http://202.114.18.218/main.aspx";
+        public static string url_baidu = "https://www.baidu.com";
+        public static string url_host = "http://202.114.18.218/main.aspx";
+        private static HttpClient http = new HttpClient();
 
-        public async static Task GetPower(Power power,ObservableCollection<PowerList> powerLists)
+        public async static Task<ObservableCollection<PowerList>> GetPower(Power power)
         {
-            var http = new HttpClient();
+            var powerLists = new ObservableCollection<PowerList>();
             paramList = new List<KeyValuePair<string, string>>();
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
-            var response = await http.GetAsync(url);
+            var response = await http.GetAsync(url_host);
             string result = response.Content.ReadAsStringAsync().Result;
             //获取到两个参数，传区域
             set_para(result);
             set_paraList("programId", power.region, Empty, Empty, Empty, Empty);
 
             await Task.Delay(20);
-            response =await http.PostAsync(url, new FormUrlEncodedContent(paramList));
+            response =await http.PostAsync(url_host, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
             //传楼栋号
             set_para(result);
             set_paraList("txtyq", power.region, power.department_num, Empty, Empty, Empty);
 
             await Task.Delay(20);
-            response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
+            response = await http.PostAsync(url_host, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
             //传宿舍号
             set_para(result);
             set_paraList(Empty, power.region, power.department_num, power.domitory_num, "65", "19");
 
             await Task.Delay(20);
-            powerLists.Clear();
-            response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
+            response = await http.PostAsync(url_host, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
 
             //初始化文档
@@ -66,14 +68,15 @@ namespace SimplePower
                     powerLists.Add(new PowerList(list2[1].InnerText, list2[0].InnerText));
                 }
             }
+            return powerLists;
         }
 
-        public async static Task GetList_region(ObservableCollection<String> regionLists)
+        public async static Task<ObservableCollection<String>> GetList_region()
         {
-            var http = new HttpClient();
+            var regionLists = new ObservableCollection<string>();
             paramList = new List<KeyValuePair<string, string>>();
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
-            var response = await http.GetAsync(url);
+            var response = await http.GetAsync(url_host);
             string result = response.Content.ReadAsStringAsync().Result;
             //初始化文档
             HtmlDocument doc = new HtmlDocument();
@@ -88,21 +91,22 @@ namespace SimplePower
                 if (i != null&&i.InnerText!="-请选择-")
                 {regionLists.Add(i.InnerText);}
             }
+            return regionLists;
         }
 
-        public async static Task GetList_dormitory(string region, ObservableCollection<String> department_Lists)
+        public async static Task<ObservableCollection<String>> GetList_dormitory(string region)
         {
-            var http = new HttpClient();
+            var department_Lists = new ObservableCollection<String>();
             paramList = new List<KeyValuePair<string, string>>();
             http.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
-            var response = await http.GetAsync(url);
+            var response = await http.GetAsync(url_host);
             string result = response.Content.ReadAsStringAsync().Result;
             //获取到两个参数，传区域
             set_para(result);
             set_paraList("programId", region, Empty, Empty, Empty, Empty);
 
             await Task.Delay(20);
-            response = await http.PostAsync(url, new FormUrlEncodedContent(paramList));
+            response = await http.PostAsync(url_host, new FormUrlEncodedContent(paramList));
             result = response.Content.ReadAsStringAsync().Result;
 
             //初始化文档
@@ -118,6 +122,7 @@ namespace SimplePower
                 if (i != null && i.InnerText != "-请选择-")
                 { department_Lists.Add(i.InnerText);}
             }
+            return department_Lists;
         }
 
         private static void set_para(string result)
@@ -144,6 +149,21 @@ namespace SimplePower
 
             paramList.Add(new KeyValuePair<string, string>("TextBox2", ""));
             paramList.Add(new KeyValuePair<string, string>("TextBox3", ""));
+        }
+
+        public async static Task<bool> TestAsync(string url)
+        {
+            try
+            {
+                var cts = new CancellationTokenSource(2000);
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                var result = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead,cts.Token);
+                return result.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

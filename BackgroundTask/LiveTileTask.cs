@@ -25,8 +25,7 @@ namespace BackgroundTask
                 if (setting_save && Data_storage.read_power() != null)
                 {
                     Power power_info = Data_storage.read_power();
-                    powerLists = new ObservableCollection<PowerList>();
-                    await myhttp.GetPower(power_info, powerLists);
+                    ObservableCollection<PowerList> powerLists = await myhttp.GetPower(power_info);
                     if (Data_storage.read_para("tile_enable") != null&&(bool) Data_storage.read_para("tile_enable")==true)
                     {
                         TileNotificationHelper.UpdateTitleNotification(power_info, powerLists);

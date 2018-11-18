@@ -66,7 +66,24 @@ namespace SimplePower
             }
         }
 
-
+        public async Task<bool> CheckNetwork()
+        {
+            if (await myhttp.TestAsync(myhttp.url_host))
+            {
+                Message = "";
+                return true;
+            }
+            else if (await myhttp.TestAsync(myhttp.url_baidu))
+            {
+                Message = "请确保您已经连上华科校园网";
+                return false;
+            }
+            else
+            {
+                Message = "网络崩溃了，请检查网络！";
+                return false;
+            }
+        }
 
     }
 }

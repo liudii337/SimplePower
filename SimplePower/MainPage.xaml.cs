@@ -32,10 +32,6 @@ namespace SimplePower
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private ObservableCollection<PowerList> powerLists { get; set; }
-        private ObservableCollection<String> region_Lists { get; set; }
-        private ObservableCollection<String> department_Lists { get; set; }
-
         MainViewModel MainVM = new MainViewModel();
 
         private Power power_info { get; set; }
@@ -49,9 +45,6 @@ namespace SimplePower
         {
             this.InitializeComponent();
             SetStatusBar();
-            MainVM.PowerLists = new ObservableCollection<PowerList>();
-            MainVM.Region_Lists = new ObservableCollection<string>();
-            MainVM.Department_Lists = new ObservableCollection<string>();
 
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
             this.Mychart.DataContext = MainVM;
@@ -59,7 +52,9 @@ namespace SimplePower
 
         private void App_Suspending(object sender, SuspendingEventArgs e)
         {
-            if(setting_save && MainVM.Message!= "该宿舍不存在")
+            if (!Button.IsEnabled)
+                return;
+            else if(setting_save && MainVM.Message!= "该宿舍不存在")
             {
                 var region_selection = (string)region_box.SelectedItem;
                 var department_selection = (string)department_box.SelectedItem;
@@ -104,10 +99,11 @@ namespace SimplePower
                 MainVM.Message = "";
                 try
                 {
-                    await myhttp.GetPower(power_info, MainVM.PowerLists);
+                    MainVM.PowerLists= await myhttp.GetPower(power_info);
                 }
                 catch
                 {
+                    MainVM.PowerLists.Clear();
                     MainVM.Message = "该宿舍不存在";
                     return;
                 }
@@ -117,12 +113,12 @@ namespace SimplePower
 
         }
 
-        private void region_box_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void region_box_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(!start_mode)
             {
                 var selection = (string)region_box.SelectedItem;
-                myhttp.GetList_dormitory(selection, MainVM.Department_Lists);
+                MainVM.Department_Lists =await myhttp.GetList_dormitory(selection);
             }
         }
 
@@ -160,38 +156,25 @@ namespace SimplePower
                 tile_enable = (bool)Data_storage.read_para("tile_enable");
                 Tile_box.IsChecked = tile_enable;
             }
-            try
+
+            if (!await MainVM.CheckNetwork())
             {
-                await myhttp.GetList_region(MainVM.Region_Lists);
+                Button.IsEnabled = false;
+                return;
             }
-            catch
-            {
-                if (MainVM.Region_Lists.Count == 0)
-                {
-                    MainVM.Message = "请确保您已经连上华科校园网";
-                    return;
-                }
-            }
+            MainVM.Region_Lists = await myhttp.GetList_region();
 
             if (setting_save && Data_storage.read_power() != null)
             {
                 power_info = (Power)Data_storage.read_power();
-                try
-                {
-                    await myhttp.GetPower(power_info, MainVM.PowerLists);
-                }
-                catch
-                {
-                    MainVM.Message = "网络崩溃了，请检查网络！";
-                    return;
-                }
+                MainVM.PowerLists = await myhttp.GetPower(power_info);
 
                 if (tile_enable)
                 { TileNotificationHelper.UpdateTitleNotification(power_info, MainVM.PowerLists); }
                 else
                 { TileNotificationHelper.CleanTileNotification(); }
                 
-                await myhttp.GetList_dormitory(power_info.region, MainVM.Department_Lists);
+                MainVM.Department_Lists= await myhttp.GetList_dormitory(power_info.region);
                 region_box.SelectedIndex = region_box.Items.IndexOf(power_info.region);
                 department_box.SelectedIndex = department_box.Items.IndexOf(power_info.department_num);
                 donitory_box.Text = power_info.domitory_num;

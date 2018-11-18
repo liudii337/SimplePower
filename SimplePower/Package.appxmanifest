@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="14286XL.18365FA2DCB07" Publisher="CN=D9C34D25-DB83-4D90-BC9D-2C03D91F65B3" Version="1.2.0.0" />
+  <Identity Name="14286XL.18365FA2DCB07" Publisher="CN=D9C34D25-DB83-4D90-BC9D-2C03D91F65B3" Version="1.2.6.0" />
   <mp:PhoneIdentity PhoneProductId="0fe001f3-f3dc-4ec1-ad4c-a54c0f12a109" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>华科电费</DisplayName>
